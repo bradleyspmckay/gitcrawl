@@ -1,2 +1,1 @@
-# Wordlist_Generation
-Wordlist Generation
+This repository contains scripts to generate wordlists
