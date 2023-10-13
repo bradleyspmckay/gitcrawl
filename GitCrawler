@@ -1,0 +1,42 @@
+#!/usr/bin/env -S python3
+
+import requests
+import os
+import argparse
+
+
+# Define command-line arguments
+parser = argparse.ArgumentParser(description="Crawl a GitHub repository and capture file names in wordlist format.")
+parser.add_argument('--username', required=True, help="GitHub username")
+parser.add_argument('--repository', required=True, help="GitHub repository name")
+parser.add_argument('--token', required=True, help="GitHub personal access token")
+args = parser.parse_args()
+
+print("GitCrawler v1.0 -- GitHub Repo Wordlists")
+print(f'Enumerating the {args.repository} repository for file names...')
+
+
+# GitHub API endpoint for the repository
+url = f'https://api.github.com/repos/{args.username}/{args.repository}/contents'
+
+# Function to retrieve file names recursively
+def get_file_names(url):
+    file_names = []
+    response = requests.get(url, headers={'Authorization': f'token {args.token}'})
+    data = response.json()
+    if not isinstance(data, list):
+        return
+    for item in data:
+        if 'type' in item and item['type'] == 'file':
+            file_names.append(item['name'])
+        elif 'type' in item and item['type'] == 'dir':
+            file_names += get_file_names(item['url'])
+    return file_names
+
+# Write the file names to a wordlist file
+file_names = get_file_names(url)
+with open(f'{args.repository}_file_names.txt', 'w') as file:
+    for name in file_names:
+        file.write(name + '\n')
+
+print('File names captured and saved to file_names.txt')
