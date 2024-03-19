@@ -36,7 +36,7 @@ def get_file_names(url, authenticated):
 
     if authenticated == True:
         response = requests.get(url, headers = {'Authorization': f'Bearer {args.token}'})
-    else:
+    elif authenticated == False:
         response = requests.get(url)
 
     data = response.json()
@@ -50,7 +50,7 @@ def get_file_names(url, authenticated):
             if authenticated == True:
                 file_names += get_file_names(item['url'], True)
             else:
-                file_names += get_file_names(item['url'])
+                file_names += get_file_names(item['url'], False)
     return file_names
 
 # Write the file names to a wordlist file
