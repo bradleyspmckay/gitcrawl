@@ -24,7 +24,7 @@ print("Enumerating the repository for file names...")
 
 # GitHub API endpoint for the repository
 url = ''
-if args.tag != '':
+if args.tag != None:
     url = f'https://api.github.com/repos/{args.owner}/{args.repository}/contents?ref={args.tag}'
 else:
     url = f'https://api.github.com/repos/{args.owner}/{args.repository}/contents'
@@ -33,7 +33,6 @@ else:
 def get_file_names(url, authenticated):
 
     file_names = []
-    response = ''
 
     if authenticated == True:
         response = requests.get(url, headers = {'Authorization': f'Bearer {args.token}'})
@@ -52,8 +51,8 @@ def get_file_names(url, authenticated):
     return file_names
 
 # Write the file names to a wordlist file
-file_names = ''
-if args.token != '':
+file_names = []
+if args.token != None:
     file_names = get_file_names(url, True)
 else:
     file_names = get_file_names(url, False)
