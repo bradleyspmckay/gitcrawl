@@ -18,9 +18,7 @@ parser.add_argument('--tag', required=False, help='The repo tag (sometimes indic
 
 args = parser.parse_args()
 
-print("GitCrawler v1.0 -- GitHub Repo File Wordlists")
-print("Enumerating the repository for file names...")
-
+print("\nEnumerating the repository for file names...")
 
 # GitHub API endpoint for the repository
 url = ''
