@@ -65,7 +65,7 @@ if args.token != None:
     file_names = get_file_names(url, True)
 else:
     file_names = get_file_names(url, False)
-if file_names == []:
+if file_names == None:
     print("No filenames were captured")
 else:
     with open(f'{args.repository}-filenames.txt', 'w') as file:
