@@ -52,7 +52,11 @@ def get_file_names(url, authenticated):
     return file_names
 
 # Write the file names to a wordlist file
-file_names = get_file_names(url)
+file_names = ''
+if args.token != '':
+    file_names = get_file_names(url, True)
+else:
+    file_names = get_file_names(url, False)
 with open(f'{args.repository}_file_names.txt', 'w') as file:
     for name in file_names:
         file.write(name + '\n')
