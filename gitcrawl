@@ -5,25 +5,43 @@ import os
 import argparse
 
 
-# Define command-line arguments
 parser = argparse.ArgumentParser(description="Crawl a GitHub repository and capture file names in wordlist format.")
-parser.add_argument('--username', required=True, help="GitHub username")
+
+# Required arguments
+parser.add_argument('--owner', required=True, help="GitHub repo owner")
 parser.add_argument('--repository', required=True, help="GitHub repository name")
-parser.add_argument('--token', required=True, help="GitHub personal access token")
+
+# Optional arguments
+parser.add_argument('--token', required=False, help="GitHub personal access token")
+parser.add_argument('--path', required=False, help="The path to the intended repository")
+parser.add_argument('--tag', required=False, help='The repo tag (sometimes indicates the version) for gitcrawl to enumerate')
+
 args = parser.parse_args()
 
-print("GitCrawler v1.0 -- GitHub Repo Wordlists")
-print(f'Enumerating the {args.repository} repository for file names...')
+print("GitCrawler v1.0 -- GitHub Repo File Wordlists")
+print("Enumerating the repository for file names...")
 
 
 # GitHub API endpoint for the repository
-url = f'https://api.github.com/repos/{args.username}/{args.repository}/contents'
+url = ''
+if args.tag != '':
+    url = f'https://api.github.com/repos/{args.owner}/{args.repository}/contents?ref={args.tag}'
+else:
+    url = f'https://api.github.com/repos/{args.owner}/{args.repository}/contents'
 
-# Function to retrieve file names recursively
-def get_file_names(url):
+# Retrieve file names recursively
+def get_file_names(url, authenticated):
+
     file_names = []
-    response = requests.get(url, headers={'Authorization': f'token {args.token}'})
+    response = ''
+
+    if authenticated == True:
+        response = requests.get(url, headers = {'Authorization': f'Bearer {args.token}'})
+    else:
+        response = requests.get(url)
+
     data = response.json()
+
     if not isinstance(data, list):
         return
     for item in data:
