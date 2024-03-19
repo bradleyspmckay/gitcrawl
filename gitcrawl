@@ -36,8 +36,14 @@ def get_file_names(url, authenticated):
 
     if authenticated == True:
         response = requests.get(url, headers = {'Authorization': f'Bearer {args.token}'})
+        if response.status_code != 200:
+            print("gitcrawl could not successfully request the github repository, please check the url and token provided")
+            return None
     elif authenticated == False:
         response = requests.get(url)
+        if response.status_code != 200:
+            print("gitcrawl could not successfully request the github repository, please check the url provided")
+            return None
 
     data = response.json()
 
@@ -59,8 +65,10 @@ if args.token != None:
     file_names = get_file_names(url, True)
 else:
     file_names = get_file_names(url, False)
-with open(f'{args.repository}_file_names.txt', 'w') as file:
-    for name in file_names:
-        file.write(name + '\n')
-
-print('File names captured and saved to file_names.txt')
+if file_names == []:
+    print("No filenames were captured")
+else:
+    with open(f'{args.repository}-filenames.txt', 'w') as file:
+        for name in file_names:
+            file.write(name + '\n')
+    print(f'File names captured and saved to {args.repository}-filenames.txt')
