@@ -48,9 +48,9 @@ def get_file_names(url, authenticated):
             file_names.append(item['name'])
         elif 'type' in item and item['type'] == 'dir':
             if authenticated == True:
-                file_names += get_file_names(item['url'], headers = {'Authorization': f'Bearer {args.token}'})
+                file_names += get_file_names(item['url'], True)
             else:
-                filenames += get_file_names(item['url'])
+                file_names += get_file_names(item['url'])
     return file_names
 
 # Write the file names to a wordlist file
