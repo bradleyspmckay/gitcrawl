@@ -5,7 +5,7 @@ import os
 import argparse
 
 
-parser = argparse.ArgumentParser(description="Crawl a GitHub repository and capture file names in wordlist format.")
+parser = argparse.ArgumentParser(prog="GitCrawl", description="Crawl a GitHub repository and capture file names in wordlist format.")
 
 # Required arguments
 parser.add_argument('--owner', required=True, help="GitHub repo owner")
